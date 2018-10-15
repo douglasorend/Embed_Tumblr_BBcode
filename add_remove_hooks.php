@@ -24,6 +24,8 @@ $hook_functions = array(
 	'integrate_load_theme' => 'BBCode_Tumblr_LoadTheme',
 	'integrate_bbc_codes' => 'BBCode_Tumblr',
 	'integrate_bbc_buttons' => 'BBCode_Tumblr_Button',
+// SMF 2.1+ Hooks below this line:
+	'integrate_pre_parsebbc' => 'BBCode_Tumblr_Embed',
 );
 
 // Adding or removing them?

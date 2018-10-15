@@ -58,25 +58,32 @@ function BBCode_Tumblr_Validate(&$tag, &$data, &$disabled)
 	$data = strtr($data, array('<br />' => ''));
 	if (strpos($data, 'http://') !== 0 && strpos($data, 'https://') !== 0)
 		$data = 'http://' . $data;
-	if (preg_match('#(http|https)://(|.+?.)\.tumblr\.com/(post|image)/(\d+)(|/(.+?))#i', $data, $parts))
-		$tag['content'] = '<a class="embedly-card" href="' . $data . '">' . $data . '</a>';
-	else
+	if (!preg_match('#(http|https)://(|.+?.)\.tumblr\.com/(post|image)/(\d+)(|/(.+?))#i', $data, $parts))
+	{
 		$tag['content'] = $txt['tumblr_no_post_id'];
-}
-
-function BBCode_Tumblr_Embed(&$message)
-{
-	$pattern = '#(|\[tumblr(|.+?)\](([<br />]+)?))(http|https):\/\/([a-zA-Z0-9_-]+)\.tumblr\.com/(post|image)/(\d+)(/([a-zA-Z0-9_-]+)?|)(\#([a-zA-Z0-9_-]+)|)(([<br />]+)?)(\[/tumblr\]|)#i';
-	$message = preg_replace($pattern, '[tumblr$2]$5://$6.tumblr.com/$7/$8$9$11[/tumblr]$13', $message);
-	$pattern = '#\[code(|(.+?))\](|.+?)\[tumblr(|.+?)\](.+?)\[/tumblr\](|.+?)\[/code\]#i';
-	$message = preg_replace($pattern, '[code$1]$3$5$6[/code]', $message);
+		return;
+	}
+	$tag['content'] = '<a class="embedly-card" href="' . $data . '">' . $data . '</a>';
 }
 
 function BBCode_Tumblr_LoadTheme()
 {
-	global $context;
+	global $context, $settings;
 	$context['html_headers'] .= '
-	<script async src="//cdn.embedly.com/widgets/platform.js" charset="UTF-8"></script>';
+	<script type="text/javascript" src="//cdn.embedly.com/widgets/platform.js" charset="UTF-8"></script>';
+	$context['insert_after_template'] .= '
+	<script type="text/javascript"><!-- // --><![CDATA[
+		do {
+			var  = document.getElementsByClassName("card");
+		} while (var !== null);
+		document.write("<link rel=\"stylesheet\" type=\"text/css\" href=\"' . $settings['default_theme_url'] . '/css/BBCode-Tumblr.css\" />");
+	</script>';
+}
+
+function BBCode_Tumblr_Embed(&$message, &$smileys, &$cache_id, &$parse_tags)
+{
+	$pattern = '~(?<=[\s>\.(;\'"]|^)(?:https?\:\/\/)([a-zA-Z0-9_-]+)\.tumblr\.com/(post|image)/(\d+)(/([a-zA-Z0-9_-]+)?|)(\#([a-zA-Z0-9_-]+)|)+\??[/\w\-_\~%@\?;=#}\\\\]?~';
+	$message = preg_replace($pattern, '[tumblr]$0[/tumblr]', $message);
 }
 
 ?>

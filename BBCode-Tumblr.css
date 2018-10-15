@@ -1,0 +1,47 @@
+/* Styles for the Embed Tumblr BBCode Mod */
+
+/*Sharing block layout fixes*/
+.border-blockquote .card .bd
+{ 
+	border-left: none !important; 
+	overflow: visible !important; 
+	padding-left: 0 !important; 
+} 
+/*kill that padding and that useless gray border*/
+@media (max-width: 450px)
+{ 
+	 /*kill that padding*/
+	 .border-blockquote .card .bd 
+	{ 
+		padding-left: 0 !important; 
+	}
+	/*fixes enormous text breaking the template, could adjust the value even more*/
+	.card .provider, .card .provider .author, .card.product .ftr .ftr-title
+	{ 
+		font-size: 0.5em !important;
+	} 
+	 /*mobile phones don't have a pointer, so it should always display no matter what*/
+	.embdscl0 
+	{ 
+		opacity: 1 !important;
+	}
+}
+ /*should keep the header cool*/
+ .card .hdr 
+{ 
+	max-width: 100% !important; 
+}
+ /*this fixes the cursed sharing code*/
+ .embdscl0 
+{ 
+	position: relative !important; 
+	display: none !important; 
+	max-width: 100% !important; 
+	width: inherit !important; 
+}
+ /*and this prevents an ugly floating effect while hovering, plus places it inline and not as if it was an ugly list*/
+.embdscl0.embd-active 
+{ 
+	display: inline-block !important; 
+	padding-top: 20px !important; 
+}

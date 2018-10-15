@@ -1,3 +1,8 @@
+v2.5 - December 1st, 2015
+o Added CSS to make the Embed.ly javascript responsive!  Thanks, Ninja ZX-10RR!!!
+o Fixed issue with auto-embed where Tumblr tags were removed from code tags.
+o Modified auto-embed function for use as a hook with SMF 2.1.
+
 v2.4 - October 2nd, 2015
 o Rewrote auto-embedding code to deal with line-breaks and duplicate closing brackets.
 
