@@ -1,4 +1,7 @@
-v2.3 - September 25st, 2015
+v2.4 - October 2nd, 2015
+o Rewrote auto-embedding code to deal with line-breaks and duplicate closing brackets.
+
+v2.3 - September 25th, 2015
 o Fixed auto-embedding issue where URLs inside code tags where auto-linked.
 
 v2.2 - September 11th, 2015

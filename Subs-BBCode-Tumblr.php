@@ -55,7 +55,7 @@ function BBCode_Tumblr_Validate(&$tag, &$data, &$disabled)
 
 	if (empty($data))
 		return ($tag['content'] = $txt['tumblr_no_post_id']);
-	$data = strtr(trim($data), array('<br />' => ''));
+	$data = strtr($data, array('<br />' => ''));
 	if (strpos($data, 'http://') !== 0 && strpos($data, 'https://') !== 0)
 		$data = 'http://' . $data;
 	if (preg_match('#(http|https)://(|.+?.)\.tumblr\.com/(post|image)/(\d+)(|/(.+?))#i', $data, $parts))
@@ -66,12 +66,8 @@ function BBCode_Tumblr_Validate(&$tag, &$data, &$disabled)
 
 function BBCode_Tumblr_Embed(&$message)
 {
-	$pattern = '#(http|https)://(|.+?.)\.tumblr\.com/(post|image)/(\d+)#i';
-	$message = preg_replace($pattern, '[tumblr]$1://$2.tumblr.com/$3/$4[/tumblr]', $message);
-	$pattern = '#(http|https)://(|.+?.)\.tumblr.com/(post|image)/(\d+)\[/tumblr]/(.+)#i';
-	$message = preg_replace($pattern, '$1://$2.tumblr.com/$3/$4/$5[/tumblr]', $message);
-	$pattern = '#\[tumblr(|.+?)\]\[tumblr\](.+?)\[/tumblr\]\[/tumblr\]#i';
-	$message = preg_replace($pattern, '[tumblr$1]$2[/tumblr]', $message);
+	$pattern = '#(|\[tumblr(|.+?)\](([<br />]+)?))(http|https):\/\/([a-zA-Z0-9_-]+)\.tumblr\.com/(post|image)/(\d+)(/([a-zA-Z0-9_-]+)?|)(\#([a-zA-Z0-9_-]+)|)(([<br />]+)?)(\[/tumblr\]|)#i';
+	$message = preg_replace($pattern, '[tumblr$2]$5://$6.tumblr.com/$7/$8$9$11[/tumblr]$13', $message);
 	$pattern = '#\[code(|(.+?))\](|.+?)\[tumblr(|.+?)\](.+?)\[/tumblr\](|.+?)\[/code\]#i';
 	$message = preg_replace($pattern, '[code$1]$3$5$6[/code]', $message);
 }
