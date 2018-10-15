@@ -21,6 +21,7 @@ if (SMF == 'SSI')
 // Define the hooks
 $hook_functions = array(
 	'integrate_pre_include' => '$sourcedir/Subs-BBCode-Tumblr.php',
+	'integrate_load_theme' => 'BBCode_Tumblr_LoadTheme',
 	'integrate_bbc_codes' => 'BBCode_Tumblr',
 	'integrate_bbc_buttons' => 'BBCode_Tumblr_Button',
 );

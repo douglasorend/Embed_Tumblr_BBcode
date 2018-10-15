@@ -1,3 +1,7 @@
+v2.1 - August 27th, 2015
+o Fixed issue where BBCodes list was completely empty because of mod... (shrug)
+o Added ability to auto-embed Tumblr URLs to the mod.
+
 v2.0 - August 25th, 2015
 o Rewrote mod so that JavaScript is used to display the Tumblr posts and images.
 

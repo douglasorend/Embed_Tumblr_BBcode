@@ -53,34 +53,25 @@ function BBCode_Tumblr_Validate(&$tag, &$data, &$disabled)
 {
 	global $sourcedir, $txt;
 
-	// Validate that this is a Tumblr URL:
 	if (empty($data))
 		return ($tag['content'] = $txt['tumblr_no_post_id']);
 	$data = strtr(trim($data), array('<br />' => ''));
 	if (strpos($data, 'http://') !== 0 && strpos($data, 'https://') !== 0)
 		$data = 'http://' . $data;
-	if (!preg_match('#(http|https)://(|.+?.)\.tumblr.com/(post|image)/(\d+)(|/(.+?))#i', $data, $parts))
-		return ($tag['content'] = $txt['tumblr_no_post_id']);
-
-	// If not already cached, get the title and then build the HTML we need to show it:
-	$md5 = md5($data);
-	if (($tag['content'] = cache_get_data('tumblr2_' . $md5, 86400)) == null)
-	{
-		require_once($sourcedir . '/Subs-Package.php');
-		$title = fetch_web_data($data);
-		$pattern = '#<title>(.+?)</title>#i';
-		if (!$title || preg_match($pattern, $title, $matches) != true)
-			return ($tag['content'] = $txt['tumblr_no_post_id']);
-		$title = $matches[1];
-		$tag['content'] = '<a class="embedly-card" href="' . $data . '">' . $title . '</a><script async src="//cdn.embedly.com/widgets/platform.js" charset="UTF-8"></script>';
-		cache_put_data('tumblr2_' . $md5, $tag['content'], 86400);
-	}
+	if (preg_match('#(http|https)://(|.+?.)\.tumblr\.com/(post|image)/(\d+)(|/(.+?))#i', $data, $parts))
+		$tag['content'] = '<a class="embedly-card" href="' . $data . '">' . $data . '</a>';
+	else
+		$tag['content'] = $txt['tumblr_no_post_id'];
 }
 
 function BBCode_Tumblr_Embed(&$message)
 {
-	$pattern = '#(http|https)://(|.+?.\.)tumblr.com/(post|image)/(\d+)(|/(.+?))#i';
-	$message = preg_replace($pattern, '[tumblr]$1://$2tumblr.com/$3/$4$5[/tumblr]', $message);
+	$pattern = '#(http|https)://(|.+?.)\.tumblr\.com/(post|image)/(\d+)#i';
+	$message = preg_replace($pattern, '[tumblr]$1://$2.tumblr.com/$3/$4[/tumblr]', $message);
+	$pattern = '#(http|https)://(|.+?.)\.tumblr.com/(post|image)/(\d+)\[/tumblr]/(.+)#i';
+	$message = preg_replace($pattern, '$1://$2.tumblr.com/$3/$4/$5[/tumblr]', $message);
+	$pattern = '#\[tumblr(|.+?)\]\[tumblr\](.+?)\[/tumblr\]\[/tumblr\]#i';
+	$message = preg_replace($pattern, '[tumblr$1]$2[/tumblr]', $message);
 }
 
 ?>

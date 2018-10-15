@@ -5,12 +5,13 @@
 <name>Embed Tumblr BBCode</name>
 <version>2.1</version>
 
-<file name="$languagedir/index.english.php">
+<file name="$sourcedir/Subs.php">
 	<operation>
-		<search position="end" />
-		<add><![CDATA[
-$txt['tumblr_read_more'] = 'Read More';
-$txt['tumblr_no_post_id'] = 'No Tumblr post ID supplied.';]]></add>
+		<search position="after"><![CDATA[// The non-breaking-space looks a bit different each time.]]></search>
+		<add><![CDATA[// Embed Tumblr URLs in the Tumblr bbcode tags:
+	BBCode_Tumblr_Embed($message);
+
+	]]></add>
 	</operation>
 </file>
 </modification>
