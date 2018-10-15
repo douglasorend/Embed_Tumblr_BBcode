@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE modification SYSTEM "http://www.simplemachines.org/xml/modification">
+<modification xmlns="http://www.simplemachines.org/xml/modification" xmlns:smf="http://www.simplemachines.org/">
+<id>Dougiefresh:Facebook</id>
+<name>Embed Facebook BBCode</name>
+<version>1.0.2</version>
+
+<file name="$languagedir/index.english.php">
+	<operation>
+		<search position="end" />
+		<add><![CDATA[
+$txt['tumblr_read_more'] = 'Read More';
+$txt['tumblr_no_post_id'] = 'No Tumblr post ID supplied.';]]></add>
+	</operation>
+</file>
+</modification>
