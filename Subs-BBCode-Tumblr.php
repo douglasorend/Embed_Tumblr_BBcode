@@ -23,18 +23,18 @@ function BBCode_Tumblr(&$bbc)
 			'length' => array('optional' => true, 'match' => '(\d+)'),
 			'padding' => array('optional' => true, 'match' => '(\d+)'),
 		),			
-		'content' => '{width}|{length}|{padding}',
+		'content' => '',
 		'validate' => 'BBCode_Tumblr_Validate',
-		'disabled_content' => '$1',
+		'disabled_content' => '<a href="$1" class="bbc_link" target="_blank">$1</a>',
 	);
 
 	// Format: [Tumblr]{Tumblr URL}[/Tumblr]
 	$bbc[] = array(
 		'tag' => 'tumblr',
 		'type' => 'unparsed_content',
-		'content' => '0|0|10',
+		'content' => '',
 		'validate' => 'BBCode_Tumblr_Validate',
-		'disabled_content' => '',
+		'disabled_content' => '<a href="$1" class="bbc_link" target="_blank">$1</a>',
 	);
 }
 
@@ -53,56 +53,34 @@ function BBCode_Tumblr_Validate(&$tag, &$data, &$disabled)
 {
 	global $sourcedir, $txt;
 
-	// Get the pieces of the URL necessary to access the Tumblr API:
+	// Validate that this is a Tumblr URL:
 	if (empty($data))
-		return;
+		return ($tag['content'] = $txt['tumblr_no_post_id']);
 	$data = strtr(trim($data), array('<br />' => ''));
 	if (strpos($data, 'http://') !== 0 && strpos($data, 'https://') !== 0)
 		$data = 'http://' . $data;
-	$pattern = '#(http|https)://(.+?).tumblr.com/post/(\d+)(|/(.+?))#i';
-	preg_match($pattern, $data, $parts);
-	if (!isset($parts[3]))
-		return $txt['tumblr_no_post_id'];
-	$url = (isset($parts[1]) ? $parts[1] : 'http') . '://' . (isset($parts[2]) ? $parts[2] : 'www') . '.tumblr.com/api/read?id=' . $parts[3];
-	$md5 = md5($url);
+	if (!preg_match('#(http|https)://(|.+?.)\.tumblr.com/(post|image)/(\d+)(|/(.+?))#i', $data, $parts))
+		return ($tag['content'] = $txt['tumblr_no_post_id']);
 
-	// IF not already cached, parse the Tumblr post into the two pieces we need:
-	if (($pieces = cache_get_data('tumblr_' . $md5, 3600)) == null)
+	// If not already cached, get the title and then build the HTML we need to show it:
+	$md5 = md5($data);
+	if (($tag['content'] = cache_get_data('tumblr2_' . $md5, 86400)) == null)
 	{
 		require_once($sourcedir . '/Subs-Package.php');
-		$search_results = fetch_web_data($url);
-		$pattern = '~<' . '\?xml\sversion="\d+\.\d+"\sencoding=".+?"\?' . '>\s*(<tumblr(.+?)>.+?</tumblr>)~is';
-		if (!$search_results || preg_match($pattern, $search_results, $matches) != true)
-			return ($tag['content'] = '');
-		$search_results = $matches[1];
-		loadClassFile('Class-Package.php');
-		$results = new xmlArray($search_results, false);
-		if (!$results->exists('tumblr'))
-			return ($tag['content'] = '');
-		$results = $results->path('tumblr[0]');
-		if (!$results->exists('posts'))
-			return ($tag['content'] = '');
-		$results = $results->path('posts[0]');
-		if (!$results->exists('post'))
-			return ($tag['content'] = '');
-		$results = $results->path('post[0]');
-		$pieces['title'] = $results->fetch('regular-title');
-		$pieces['body'] = $results->fetch('regular-body');
-		$pieces['url'] = $data;
-		cache_put_data('tumblr_' . $md5, $pieces, 3600);
+		$title = fetch_web_data($data);
+		$pattern = '#<title>(.+?)</title>#i';
+		if (!$title || preg_match($pattern, $title, $matches) != true)
+			return ($tag['content'] = $txt['tumblr_no_post_id']);
+		$title = $matches[1];
+		$tag['content'] = '<a class="embedly-card" href="' . $data . '">' . $title . '</a><script async src="//cdn.embedly.com/widgets/platform.js" charset="UTF-8"></script>';
+		cache_put_data('tumblr2_' . $md5, $tag['content'], 86400);
 	}
+}
 
-	// Output the tumblr post to the user, styled correctly:
-	list($width, $length, $padding) = explode('|', $tag['content']);
-	$padding = (empty($padding) ? 10 : $padding);
-	if (!empty($length))
-	{
-		$longer = strlen($pieces['body']) > $length;
-		$pieces['body'] = substr($pieces['body'], 0, $length);
-	}
-	$tag['content'] = '<div style="' . (!empty($width) ? 'width: ' . $width . 'px;' : '') . ' background-color: #ffffff; padding: ' . $padding . 'px;">
-		<div class="cat_bar"><h3 class="catbg"><a href="' . $pieces['url'] . '">' . $pieces['title'] . '</a></h3></div>
-		' . $pieces['body'] . (!empty($longer) ? '...' : '') . '</br><div style="text-align: right;"><a target=frame2 href="' . $url . '">' . $txt['tumblr_read_more'] . '</a></div></div>';
+function BBCode_Tumblr_Embed(&$message)
+{
+	$pattern = '#(http|https)://(|.+?.\.)tumblr.com/(post|image)/(\d+)(|/(.+?))#i';
+	$message = preg_replace($pattern, '[tumblr]$1://$2tumblr.com/$3/$4$5[/tumblr]', $message);
 }
 
 ?>

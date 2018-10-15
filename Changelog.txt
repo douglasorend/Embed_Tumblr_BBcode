@@ -1,0 +1,5 @@
+v2.0 - August 25th, 2015
+o Rewrote mod so that JavaScript is used to display the Tumblr posts and images.
+
+v1.0 - July 4th, 2015
+o Initial Release
