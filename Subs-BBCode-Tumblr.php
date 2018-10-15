@@ -49,34 +49,49 @@ function BBCode_Tumblr_Button(&$buttons)
 
 function BBCode_Tumblr_Validate(&$tag, &$data, &$disabled)
 {
-	global $sourcedir, $txt;
+	global $sourcedir, $txt, $context, $settings;
+	static $js_included = false;
 
+	// Set up for a run through the bbcode:
 	if (empty($data))
 		return ($tag['content'] = $txt['tumblr_no_post_id']);
 	$data = strtr($data, array('<br />' => ''));
 	if (strpos($data, 'http://') !== 0 && strpos($data, 'https://') !== 0)
 		$data = 'http://' . $data;
+
+	// Is this a Tumblr post URL?  If not, abort:
+	$tag['content'] = $txt['tumblr_no_post_id'];
 	if (!preg_match('#(http|https)://(|.+?.)\.tumblr\.com/(post|image)/(\d+)(|/(.+?))#i', $data, $parts))
-	{
-		$tag['content'] = $txt['tumblr_no_post_id'];
 		return;
-	}
+
+	// Create the html content and add related Javascript stuff if not already done:
 	list($width) = explode('|', $tag['content']);
 	$tag['content'] = '<a class="embedly-card" href="' . $data . '"' . (!empty($width) ? ' data-card-width="' . $width . '"' : '') . '>' . $data . '</a>';
-}
-
-function BBCode_Tumblr_LoadTheme()
-{
-	global $context, $settings;
-	$context['html_headers'] .= '
-	<script type="text/javascript" src="//cdn.embedly.com/widgets/platform.js" charset="UTF-8"></script>';
-	$context['insert_after_template'] .= '
+	if (empty($js_included))
+	{
+		$context['insert_after_template'] .= '
 	<script type="text/javascript"><!-- // --><![CDATA[
 		do {
 			var  = document.getElementsByClassName("card");
 		} while (var !== null);
 		document.write("<link rel=\"stylesheet\" type=\"text/css\" href=\"' . $settings['default_theme_url'] . '/css/BBCode-Tumblr.css\" />");
 	</script>';
+		$js_included = true;
+	}
+
+	// Are we running Tapatalk?  If so, return ONLY the link!!!
+	if (defined('IN_MOBIQUO'))
+		$tag['content'] = '<a href="' . $data . '">' . $data . '</a>';
+	// Otherwise, add the Facebook URL if admin says so:
+	elseif (!empty($modSettings['tumblr_include_link']))
+		$tag['content'] .= '<br /><a href="' . $data . '">' . $data . '</a>';
+}
+
+function BBCode_Tumblr_LoadTheme()
+{
+	global $context;
+	$context['html_headers'] .= '
+	<script type="text/javascript" src="//cdn.embedly.com/widgets/platform.js" charset="UTF-8"></script>';
 }
 
 function BBCode_Tumblr_Embed(&$message, &$smileys, &$cache_id, &$parse_tags)

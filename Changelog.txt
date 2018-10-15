@@ -1,3 +1,6 @@
+v2.8 - November 29th, 2017
+o Added Tapatalk support, which returns only the link to the user.
+
 v2.7 - August 9th, 2017
 o Added code to make [b]width[/b] parameter work.
 o Removed parameters [b]length[/b] and [b]padding[/b], as they are irrelatant.
