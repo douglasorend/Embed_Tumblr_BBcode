@@ -82,8 +82,11 @@ function BBCode_Tumblr_LoadTheme()
 
 function BBCode_Tumblr_Embed(&$message, &$smileys, &$cache_id, &$parse_tags)
 {
+	$replace = (strpos($cache_id, 'sig') !== false ? '[url]$0[/url]' : '[tumblr]$0[/tumblr]');
 	$pattern = '~(?<=[\s>\.(;\'"]|^)(?:https?\:\/\/)([a-zA-Z0-9_-]+)\.tumblr\.com/(post|image)/(\d+)(/([a-zA-Z0-9_-]+)?|)(\#([a-zA-Z0-9_-]+)|)+\??[/\w\-_\~%@\?;=#}\\\\]?~';
-	$message = preg_replace($pattern, '[tumblr]$0[/tumblr]', $message);
+	$message = preg_replace($pattern, $replace, $message);
+	if (strpos($cache_id, 'sig') !== false)
+		$message = preg_replace('#\[tumblr.*\](.*)\[\/tumblr\]#i', '[url]$1[/url]', $message);
 }
 
 ?>

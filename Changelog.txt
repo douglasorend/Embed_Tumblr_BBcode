@@ -1,3 +1,6 @@
+v2.6 - March 7th, 2016
+o Modified auto-embed code so that Tumblr URLs in signature are embedded as [b][nobbc][url]{link}[/url][/nobbc][/b].
+
 v2.5 - December 1st, 2015
 o Added CSS to make the Embed.ly javascript responsive!  Thanks, Ninja ZX-10RR!!!
 o Fixed issue with auto-embed where Tumblr tags were removed from code tags.
