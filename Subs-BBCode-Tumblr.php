@@ -72,6 +72,8 @@ function BBCode_Tumblr_Embed(&$message)
 	$message = preg_replace($pattern, '$1://$2.tumblr.com/$3/$4/$5[/tumblr]', $message);
 	$pattern = '#\[tumblr(|.+?)\]\[tumblr\](.+?)\[/tumblr\]\[/tumblr\]#i';
 	$message = preg_replace($pattern, '[tumblr$1]$2[/tumblr]', $message);
+	$pattern = '#\[code(|(.+?))\](|.+?)\[tumblr(|.+?)\](.+?)\[/tumblr\](|.+?)\[/code\]#i';
+	$message = preg_replace($pattern, '[code$1]$3$5$6[/code]', $message);
 }
 
 function BBCode_Tumblr_LoadTheme()

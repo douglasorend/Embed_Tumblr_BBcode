@@ -1,3 +1,6 @@
+v2.3 - September 25st, 2015
+o Fixed auto-embedding issue where URLs inside code tags where auto-linked.
+
 v2.2 - September 11th, 2015
 o Fixed mod so that Tumblr posts are correctly embedded in the post.
 
