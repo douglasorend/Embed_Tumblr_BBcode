@@ -1,5 +1,5 @@
 [hr]
-[center][color=red][size=16pt][b]EMBED TUMBLR BBCODE v2.6[/b][/size][/color]
+[center][color=red][size=16pt][b]EMBED TUMBLR BBCODE v2.7[/b][/size][/color]
 [url=http://www.simplemachines.org/community/index.php?action=profile;u=253913][b]By Dougiefresh[/b][/url] -> [url=http://custom.simplemachines.org/mods/index.php?mod=4065]Link to Mod[/url]
 [/center]
 [hr]
@@ -10,7 +10,7 @@ This modification adds a BBCode to view Tumblr post.
 The BBCode takes these forms:
 [code]
 [tumblr]{tumblr URL}[/tumblr]
-[tumblr width=x height=x]{tumblr URL}[/tumblr]
+[tumblr width=x]{tumblr URL}[/tumblr]
 [/code]
 where [b]{tumblr URL}[/b] is the Tumblr URL that you want to pull the Tumblr post from.
 

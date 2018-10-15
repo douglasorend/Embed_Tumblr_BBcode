@@ -20,10 +20,8 @@ function BBCode_Tumblr(&$bbc)
 		'type' => 'unparsed_content',
 		'parameters' => array(
 			'width' => array('optional' => true, 'match' => '(\d+)'),
-			'length' => array('optional' => true, 'match' => '(\d+)'),
-			'padding' => array('optional' => true, 'match' => '(\d+)'),
 		),			
-		'content' => '',
+		'content' => '{width}',
 		'validate' => 'BBCode_Tumblr_Validate',
 		'disabled_content' => '<a href="$1" class="bbc_link" target="_blank">$1</a>',
 	);
@@ -63,7 +61,8 @@ function BBCode_Tumblr_Validate(&$tag, &$data, &$disabled)
 		$tag['content'] = $txt['tumblr_no_post_id'];
 		return;
 	}
-	$tag['content'] = '<a class="embedly-card" href="' . $data . '">' . $data . '</a>';
+	list($width) = explode('|', $tag['content']);
+	$tag['content'] = '<a class="embedly-card" href="' . $data . '"' . (!empty($width) ? ' data-card-width="' . $width . '"' : '') . '>' . $data . '</a>';
 }
 
 function BBCode_Tumblr_LoadTheme()

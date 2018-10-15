@@ -1,3 +1,8 @@
+v2.7 - August 9th, 2017
+o Added code to make [b]width[/b] parameter work.
+o Removed parameters [b]length[/b] and [b]padding[/b], as they are irrelatant.
+o Fixed documentation to remove reference to [b]height[/b] parameter.
+
 v2.6 - March 7th, 2016
 o Modified auto-embed code so that Tumblr URLs in signature are embedded as [b][nobbc][url]{link}[/url][/nobbc][/b].
 
