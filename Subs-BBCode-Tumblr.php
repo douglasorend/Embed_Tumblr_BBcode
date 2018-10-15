@@ -74,4 +74,11 @@ function BBCode_Tumblr_Embed(&$message)
 	$message = preg_replace($pattern, '[tumblr$1]$2[/tumblr]', $message);
 }
 
+function BBCode_Tumblr_LoadTheme()
+{
+	global $context;
+	$context['html_headers'] .= '
+	<script async src="//cdn.embedly.com/widgets/platform.js" charset="UTF-8"></script>';
+}
+
 ?>

@@ -1,3 +1,6 @@
+v2.2 - September 11th, 2015
+o Fixed mod so that Tumblr posts are correctly embedded in the post.
+
 v2.1 - August 27th, 2015
 o Fixed issue where BBCodes list was completely empty because of mod... (shrug)
 o Added ability to auto-embed Tumblr URLs to the mod.
